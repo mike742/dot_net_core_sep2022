@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -35,14 +36,42 @@ ToXml(obj, "data2.xml");
 
 var obj_from_file = FromXml<Top>("data2.xml");
 
-obj_from_file.Print();
+// obj_from_file.Print();
 
-// obj.Print();
+List<Employee> employees = new List<Employee> { 
+    new Employee { Id = 101, FirstName = "Mark", LastName = "Smith", Salary = 1800},
+    new Employee { Id = 102, FirstName = "Lucy", LastName = "Swanson", Salary = 1950},
+    new Employee { Id = 103, FirstName = "Tracy", LastName = "Johnson", Salary = 2500},
+    new Employee { Id = 104, FirstName = "John", LastName = "Doe", Salary = 2450},
+};
 
-/*
+string file = "employee2.dat";
+ToBinary(employees, file);
+List<Employee> employees1 = FromBinary<List<Employee>>(file);
 
-*/
+foreach (Employee employee in employees1)
+{
+    Console.WriteLine($"{employee.Id} {employee.FirstName}");
+}
 
+
+static T FromBinary<T>(string filename)
+{
+    using (Stream st = File.Open("employee.dat", FileMode.Open))
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        return (T)bf.Deserialize(st);
+    }
+}
+
+static void ToBinary<T>(T data, string filename)
+{
+    using (Stream st = File.Open(filename, FileMode.Create))
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        bf.Serialize(st, data);
+    }
+}
 
 static T FromXml<T>(string file_path)
 {
