@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using ConsoleApp_don_net_6;
+using ConsoleApp_don_net_6.BDModel;
 
 // "Pa$$w0rd" 
 // string password = Console.ReadLine();
@@ -28,16 +29,17 @@ string enc_password = "pdCrlqUcxFA/AHzZcT/tNw==";
 // string content = File.ReadAllText(file_path);
 
 // Console.WriteLine(content);
-var obj = FromJson<Top>("data.json");
+// var obj = FromJson<Top>("data.json");
 
 // ToJson(obj, "test_file.json");
-ToXml(obj, "data2.xml");
+// ToXml(obj, "data2.xml");
 
 
-var obj_from_file = FromXml<Top>("data2.xml");
+// var obj_from_file = FromXml<Top>("data2.xml");
 
 // obj_from_file.Print();
 
+/*
 List<Employee> employees = new List<Employee> { 
     new Employee { Id = 101, FirstName = "Mark", LastName = "Smith", Salary = 1800},
     new Employee { Id = 102, FirstName = "Lucy", LastName = "Swanson", Salary = 1950},
@@ -53,6 +55,19 @@ foreach (Employee employee in employees1)
 {
     Console.WriteLine($"{employee.Id} {employee.FirstName}");
 }
+*/
+
+northwindContext context = new northwindContext();
+int amount = context.Invoices.Count();
+Console.WriteLine($"{amount}");
+
+var res = context.Customers.Where(c => c.City == "Boston");
+// Console.WriteLine($"res = {res}");
+foreach (var c in res)
+{
+    Console.WriteLine($"{c.Id} {c.FirstName} {c.LastName}");
+}
+
 
 
 static T FromBinary<T>(string filename)
